@@ -161,7 +161,7 @@ class ResourceManager:
                                 data)
                 else:
                     data = cv2.cvtColor(args.data, cv2.COLOR_RGB2BGR)
-                    cv2.imwrite(path.join(self.visualization_dir, vis_mode, args.name + '.jpg'),
+                    cv2.imwrite(path.join(self.visualization_dir, vis_mode, args.name + '.png'),
                                 data)
             elif args.type == 'soft_mask':
                 # numpy array, save each channel with cv2
@@ -189,7 +189,7 @@ class ResourceManager:
                     new_w = (w * self.max_size // min(w, h))
                     new_h = (h * self.max_size // min(w, h))
                     frame = cv2.resize(frame, dsize=(new_w, new_h), interpolation=cv2.INTER_AREA)
-                cv2.imwrite(path.join(self.image_dir, f'{frame_index:07d}.jpg'), frame)
+                cv2.imwrite(path.join(self.image_dir, f'{frame_index:07d}.png'), frame)
                 frame_index += 1
                 bar.update()
         print('Done!')
@@ -245,7 +245,7 @@ class ResourceManager:
         # returns H*W*3 uint8 array
         assert 0 <= ti < self.length
 
-        image = Image.open(path.join(self.image_dir, self.names[ti] + '.jpg')).convert('RGB')
+        image = Image.open(path.join(self.image_dir, self.names[ti] + '.png')).convert('RGB')
         image = np.array(image)
         return image
 

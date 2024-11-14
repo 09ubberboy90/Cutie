@@ -13,7 +13,7 @@ def convert_frames_to_video(
         fps: int = 24,
         bitrate: int = 1,  # in Mbps
         progress_callback=None) -> None:
-    images = [img for img in sorted(os.listdir(image_folder)) if img.endswith(".jpg")]
+    images = [img for img in sorted(os.listdir(image_folder)) if img.endswith(".png")]
     frame = cv2.imread(os.path.join(image_folder, images[0]))
     height, width, layers = frame.shape
 
@@ -52,6 +52,11 @@ def convert_mask_to_binary(mask_folder: str,
         mask = np.array(mask)
         mask = np.where(np.isin(mask, target_objects), 255, 0)
         cv2.imwrite(os.path.join(output_path, mask_path), mask)
-
+        mask_converted = cv2.convertScaleAbs(mask)
+        contours, _ = cv2.findContours(mask_converted, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        x, y, w, h = cv2.boundingRect(contours[0])
+        os.makedirs(output_path.replace("binary_masks", "bounding_box"), exist_ok=True)
+        with open(os.path.join(output_path.replace("binary_masks", "bounding_box"), mask_path.replace(".png", ".txt")), "w") as f:
+            f.write(f"{x} {y} {w} {h}")
         if progress_callback is not None and i % 10 == 0:
             progress_callback(i / len(masks))

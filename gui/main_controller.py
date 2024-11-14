@@ -241,7 +241,7 @@ class MainController():
             self.update_canvas()
 
         self.gui.update_slider(self.curr_ti)
-        self.gui.frame_name.setText(self.res_man.names[self.curr_ti] + '.jpg')
+        self.gui.frame_name.setText(self.res_man.names[self.curr_ti] + '.png')
 
     def set_vis_mode(self):
         self.vis_mode = self.gui.combo.currentText()

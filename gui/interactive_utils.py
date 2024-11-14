@@ -113,6 +113,19 @@ def overlay_davis(image: np.ndarray, mask: np.ndarray, alpha: float = 0.5, fade:
     binary_mask = (mask > 0)
     # Compose image
     im_overlay[binary_mask] = foreground[binary_mask]
+    rows, cols = np.nonzero(mask)
+    # Calculate the bounding box coordinates
+    if len(rows) > 0 and len(cols) > 0:
+        top = np.min(rows)
+        bottom = np.max(rows)
+        left = np.min(cols)
+        right = np.max(cols)
+        
+       
+        # Draw the bounding box on the image
+        im_overlay[top:bottom+1, [left, right]] = 255
+        im_overlay[[top, bottom], left:right+1] = 255
+
     if fade:
         im_overlay[~binary_mask] = im_overlay[~binary_mask] * 0.6
     return im_overlay.astype(image.dtype)
